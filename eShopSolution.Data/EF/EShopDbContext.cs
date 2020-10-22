@@ -1,5 +1,6 @@
 ﻿using eShopSolution.Data.Configuarations;
 using eShopSolution.Data.Entities;
+using eShopSolution.Data.Extensions;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Concurrent;
@@ -10,13 +11,14 @@ namespace eShopSolution.Data.EF
 {
     public class EShopDbContext : DbContext
     {
-        public EShopDbContext( DbContextOptions options) : base(options)
+        public EShopDbContext(DbContextOptions options) : base(options)
         {
-            
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //Configuration using Fluent API
             modelBuilder.ApplyConfiguration(new AppConfigConfiguration());
             modelBuilder.ApplyConfiguration(new ProductConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryConfiguration());
@@ -29,13 +31,34 @@ namespace eShopSolution.Data.EF
             modelBuilder.ApplyConfiguration(new LangugeConfiguration());
             modelBuilder.ApplyConfiguration(new ProductTranslationConfiguration());
             modelBuilder.ApplyConfiguration(new PromotionConfiguration());
+
+            //Data Seeding
+
+            modelBuilder.Seed();
+            //modelBuilder.Entity<AppConfig>().HasData(
+            //    new AppConfig()
+            //    {
+            //        Key = "HomeTitle",
+            //        Value = "This is home page of eShopSolution"
+            //    }, 
+            //    new AppConfig()
+            //    {
+            //        Key = "HomeKeyword",
+            //        Value = "This is keyword page of eShopSolution"
+            //    },
+            //    new AppConfig()
+            //    {
+            //        Key = "HomeDescription",
+            //        Value = "This is description page of eShopSolution"
+            //    }
+            //);
         }
 
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<AppConfig> AppConfigs { get; set; }
         public DbSet<Cart> Carts { get; set; }
-        public DbSet<CategoryTranslation> CategoryTranslations { get; set; }        
+        public DbSet<CategoryTranslation> CategoryTranslations { get; set; }
         public DbSet<ProductTranslation> ProductTranslations { get; set; }
         public DbSet<Language> Languages { get; set; }
         public DbSet<Contact> Contacts { get; set; }

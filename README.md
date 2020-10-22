@@ -6,6 +6,8 @@
 -- Microsoft.EntityFrameworkCore.SqlServer
 -- Microsoft.EntityFrameworkCore.Design
 -- Microsoft.EntityFrameworkCore.Tools
+## Identity Database
+--- Install package EntityFramewordCore
 ## Youtube Tutorial
 
 ## How to configure and run

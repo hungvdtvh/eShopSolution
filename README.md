@@ -8,6 +8,10 @@
 -- Microsoft.EntityFrameworkCore.Tools
 ## Identity Database
 --- Install package EntityFramewordCore
+## Create WebApi Project
+---- Copy connectstring from appsetting.Development.json eShopSolution.Data to appsetting.Development.json eShopSolution.BackenApi
+## Add Swagger UI API
 ## Youtube Tutorial
+
 
 ## How to configure and run

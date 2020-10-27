@@ -1,9 +1,8 @@
-﻿using eShopSolution.Application.Catalogs.Products.Dtos;
-using eShopSolution.Application.Catalogs.Products.Dtos.Manage;
-using eShopSolution.Application.Dtos;
-using System;
+﻿using eShopSolution.ViewModels.Catalog;
+using eShopSolution.ViewModels.Catalog.Products;
+using eShopSolution.ViewModels.Common;
+using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace eShopSolution.Application.Catalogs.Products
@@ -54,6 +53,11 @@ namespace eShopSolution.Application.Catalogs.Products
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        Task<PagedResult<ProductViewModel>> GetAllPaging(GetProductPagingRequest request);
+        Task<PagedResult<ProductViewModel>> GetAllPaging(GetManageProductPagingRequest request);
+
+        Task<int> AddImages(int productId, List<IFormFile> files);
+        Task<int> RemoveImages(int imageId);
+        Task<int> UpdatesImages(int imageId, string caption, bool isDefault);
+        Task<List<ProductImageViewModel>> getListImages(int productId);
     }
 }

@@ -79,5 +79,7 @@ namespace eShopSolution.Data.EF
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Promotion> Promotions { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
+
     }
 }

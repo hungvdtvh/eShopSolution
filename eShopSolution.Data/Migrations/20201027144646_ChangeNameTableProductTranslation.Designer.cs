@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using eShopSolution.Data.EF;
 
 namespace eShopSolution.Data.Migrations
 {
     [DbContext(typeof(EShopDbContext))]
-    partial class EShopDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201027144646_ChangeNameTableProductTranslation")]
+    partial class ChangeNameTableProductTranslation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -180,7 +182,7 @@ namespace eShopSolution.Data.Migrations
                         new
                         {
                             Id = new Guid("a1330fab-ac03-4d0e-9887-ffe7d76584b1"),
-                            ConcurrencyStamp = "6973224c-84a0-46de-8d45-c2f261be38e2",
+                            ConcurrencyStamp = "39af673b-4719-4336-884d-6f9021cfb9b7",
                             Description = "Adminstrator role",
                             Name = "Admin",
                             NormalizedName = "Admin"
@@ -257,7 +259,7 @@ namespace eShopSolution.Data.Migrations
                         {
                             Id = new Guid("f8ff17f5-b3a7-4af1-bdd5-44d02750508a"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "8be6010f-3817-4993-a4c9-199892bf6956",
+                            ConcurrencyStamp = "c7344dd3-9fa1-4a86-8c93-2cf68b58dd49",
                             Dob = new DateTime(1993, 12, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Email = "hungvd.tvh@gmail.com",
                             EmailConfirmed = true,
@@ -265,7 +267,7 @@ namespace eShopSolution.Data.Migrations
                             LastName = "Vo Duy",
                             LockoutEnabled = false,
                             NormalizedUserName = "Admin",
-                            PasswordHash = "AQAAAAEAACcQAAAAELFoCkn4+7fWXOKbR9npUHyMdG0upjJYGXvuovQGEkc1zkaP5IJddfSutI9LzotpDw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMZnG/UtVt8VWa2LHvSHDJJx/kX5x+S9jx1EMTcrPBbg5QOXyq/gu3vIduIveoMcQQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -311,8 +313,6 @@ namespace eShopSolution.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<bool>("IsShowOnHome")
@@ -584,8 +584,6 @@ namespace eShopSolution.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:IdentityIncrement", 1)
-                        .HasAnnotation("SqlServer:IdentitySeed", 1)
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("DateCreated")
@@ -617,7 +615,7 @@ namespace eShopSolution.Data.Migrations
                         new
                         {
                             Id = 1,
-                            DateCreated = new DateTime(2020, 10, 28, 8, 8, 54, 443, DateTimeKind.Local).AddTicks(8745),
+                            DateCreated = new DateTime(2020, 10, 27, 21, 46, 45, 127, DateTimeKind.Local).AddTicks(4776),
                             OriginalPrice = 100000m,
                             Price = 200000m,
                             Stock = 0,

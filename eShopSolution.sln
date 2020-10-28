@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30611.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eShopSolution.WebApp", "eShopSolution.WebApp\eShopSolution.WebApp.csproj", "{3467DDC6-5C32-4571-A4DA-8D99C06ADE77}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7B508AB9-35C1-48A7-9F23-D4DBA1DAF429}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "0. Solution Items", "0. Solution Items", "{7B508AB9-35C1-48A7-9F23-D4DBA1DAF429}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 	EndProjectSection
@@ -18,7 +18,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eShopSolution.Utilities", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eShopSolution.ViewModels", "eShopSolution.ViewModels\eShopSolution.ViewModels.csproj", "{242F3381-C59E-48C1-BB28-691BCA12132E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eShopSolution.BackenApi", "eShopSolution.BackenApi\eShopSolution.BackenApi.csproj", "{6C5DA2FB-4DE7-463B-9C72-5C2FB52C8878}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eShopSolution.BackenApi", "eShopSolution.BackenApi\eShopSolution.BackenApi.csproj", "{6C5DA2FB-4DE7-463B-9C72-5C2FB52C8878}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Infrastructure", "1. Infrastructure", "{3452D764-B228-4F17-AD2C-EAFC09B74F8C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2. Domain", "2. Domain", "{B7327DC1-127C-42AD-AB56-686B6FB49102}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3. Hosts", "3. Hosts", "{0E6A303C-05FC-41D3-8244-6096BF9D0097}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +59,14 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3467DDC6-5C32-4571-A4DA-8D99C06ADE77} = {0E6A303C-05FC-41D3-8244-6096BF9D0097}
+		{F4B7EF37-B235-4A90-989B-78BDCBF1AD09} = {B7327DC1-127C-42AD-AB56-686B6FB49102}
+		{3C0DA479-91CC-4951-8E74-EB5CC45C7D98} = {B7327DC1-127C-42AD-AB56-686B6FB49102}
+		{8EDEC102-6608-41BD-92F8-0B0A885CA078} = {3452D764-B228-4F17-AD2C-EAFC09B74F8C}
+		{242F3381-C59E-48C1-BB28-691BCA12132E} = {3452D764-B228-4F17-AD2C-EAFC09B74F8C}
+		{6C5DA2FB-4DE7-463B-9C72-5C2FB52C8878} = {0E6A303C-05FC-41D3-8244-6096BF9D0097}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {78B089D1-5D5A-46DF-BEAE-98E3EA4607EC}

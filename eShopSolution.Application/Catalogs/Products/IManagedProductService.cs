@@ -1,4 +1,4 @@
-﻿using eShopSolution.ViewModels.Catalog;
+﻿using eShopSolution.ViewModels.Catalog.ProductImages;
 using eShopSolution.ViewModels.Catalog.Products;
 using eShopSolution.ViewModels.Common;
 using Microsoft.AspNetCore.Http;
@@ -15,17 +15,15 @@ namespace eShopSolution.Application.Catalogs.Products
         Task<bool> UpdatePrice(int productId, decimal newPrice);
         Task<bool> UpdateStock(int productId, int addQuatity);
         Task AddViewCount(int productId);
-        /// <summary>
-        /// Xóa Sản phẩm
-        /// </summary>
-        /// <param name="productId"></param>
-        /// <returns></returns>
         Task<int> Delete(int productId);
         Task<PagedResult<ProductViewModel>> GetAllPaging(GetManageProductPagingRequest request);
-        Task<int> AddImages(int productId, List<IFormFile> files);
-        Task<int> RemoveImages(int imageId);
-        Task<int> UpdatesImages(int imageId, string caption, bool isDefault);
-        Task<List<ProductImageViewModel>> getListImages(int productId);
         Task<ProductViewModel> GetById(int productId, string languageId);
+
+
+        Task<int> AddImages(int productId, ProductImageCreateRequest reuest);
+        Task<int> RemoveImages(int imageId);
+        Task<int> UpdatesImages(int imageId, ProductImageUpdateRequest request);
+        Task<List<ProductImageViewModel>> GetListImages(int productId);
+        Task<ProductImageViewModel> GetImageById(int imageId);
     }
 }

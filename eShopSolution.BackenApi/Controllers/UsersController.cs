@@ -21,13 +21,13 @@ namespace eShopSolution.BackenApi.Controllers
         }
         [HttpPost("authencate")]
         [AllowAnonymous]
-        public async Task<IActionResult> Authencate([FromForm]LoginRequest request)
+        public async Task<IActionResult> Authencate([FromBody]LoginRequest request)
         {
 
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var result = await _userService.Authencate(request);
             if (!string.IsNullOrEmpty(result))
-                return Ok(new { token= result});
+                return Ok(result);
             else return BadRequest(ModelState);
         }
 

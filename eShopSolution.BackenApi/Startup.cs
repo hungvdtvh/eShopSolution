@@ -53,7 +53,7 @@ namespace eShopSolution.BackenApi
             //services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
 
             services.AddControllers()
-                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>()); ;
+                .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
 
             services.AddSwaggerGen(c =>
             {

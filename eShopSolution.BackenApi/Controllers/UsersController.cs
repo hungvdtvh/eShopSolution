@@ -12,6 +12,7 @@ namespace eShopSolution.BackenApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -21,17 +22,19 @@ namespace eShopSolution.BackenApi.Controllers
         }
         [HttpPost("authencate")]
         [AllowAnonymous]
-        public async Task<IActionResult> Authencate([FromBody]LoginRequest request)
+        public async Task<IActionResult> Authencate([FromBody] LoginRequest request)
         {
 
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            var result = await _userService.Authencate(request);
-            if (!string.IsNullOrEmpty(result))
-                return Ok(result);
-            else return BadRequest(ModelState);
+            var resultToken = await _userService.Authencate(request);
+
+            if (string.IsNullOrEmpty(resultToken))
+                return BadRequest("UserName or Password is incorrect");
+            
+            return Ok(resultToken);
         }
 
-        [HttpPost("register")]
+        [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> Register([FromForm] RegisterRequest request)
         {
@@ -41,6 +44,13 @@ namespace eShopSolution.BackenApi.Controllers
             if (result)
                 return Ok();
             else return BadRequest(ModelState);
+        }
+
+        [HttpGet("paging")]
+        public async Task<IActionResult> GetAllPagging([FromQuery] GetUserPagingRequest request)
+        {
+            var product = await _userService.GetUserPaging(request);
+            return Ok(product);
         }
     }
 }

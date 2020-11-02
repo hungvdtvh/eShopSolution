@@ -9,6 +9,7 @@ using eShopSolution.AdminApp.Services;
 using eShopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Logging;
@@ -25,9 +26,18 @@ namespace eShopSolution.AdminApp.Controllers
             _userClient = userClient;
             _configuration = configuration;
         }
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Index(string keyword, int pagIndex=1, int pageSize=10)
         {
-            return View();
+            var session = HttpContext.Session.GetString("Token");
+            var request = new GetUserPagingRequest()
+            {
+                BearerToken = session,
+                PageIndex = pagIndex,
+                PageSize = pageSize
+            };
+            var data = await _userClient.GetUsersPagings(request);
+            return View(data);
         }
         [HttpGet]
         public async Task<IActionResult> Login()
@@ -46,6 +56,7 @@ namespace eShopSolution.AdminApp.Controllers
                 ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
                 IsPersistent = false
             };
+            HttpContext.Session.SetString("Token", token);
             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 userPrincipal,
@@ -57,6 +68,7 @@ namespace eShopSolution.AdminApp.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            HttpContext.Session.Remove("Token");
             return RedirectToAction("Login", "User");
         }
         private ClaimsPrincipal ValidateToken(string jwtToken)

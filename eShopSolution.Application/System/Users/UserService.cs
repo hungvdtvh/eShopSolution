@@ -1,12 +1,15 @@
 ﻿using eShopSolution.Data.Entities;
 using eShopSolution.Utilities.Exceptions;
+using eShopSolution.ViewModels.Common;
 using eShopSolution.ViewModels.System.Users;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Security.Claims;
 using System.Text;
@@ -21,7 +24,7 @@ namespace eShopSolution.Application.System.Users
         private readonly RoleManager<AppRole> _roleManager;
         private readonly IConfiguration _config;
 
-        public UserService(UserManager<AppUser> userManager, 
+        public UserService(UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager,
             RoleManager<AppRole> roleManager,
             IConfiguration config)
@@ -56,7 +59,34 @@ namespace eShopSolution.Application.System.Users
                 expires: DateTime.Now.AddHours(3),
                 signingCredentials: creds);
             return new JwtSecurityTokenHandler().WriteToken(token);
-            
+
+        }
+
+        public async Task<PagedResult<UserVm>> GetUserPaging(GetUserPagingRequest request)
+        {
+            var querry = _userManager.Users;
+            if (!string.IsNullOrEmpty(request.KeyWord))
+                querry = querry.Where(x => x.UserName.Contains(request.KeyWord) || x.PhoneNumber.Contains(request.KeyWord));
+            int totalRow = await querry.CountAsync();
+            var data = await querry.Skip((request.PageIndex - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(x => new UserVm()
+                {
+                    Email=x.Email,
+                    PhoneNumber=x.PhoneNumber,
+                    UserName=x.UserName,
+                    FirstName=x.FristName,
+                    Id=x.Id,
+                    LastName=x.LastName
+                }).ToListAsync();
+
+            var pageResult = new PagedResult<UserVm>()
+            {
+                TotalRecord = totalRow,
+                Items = data
+            };
+            return pageResult;
+
         }
 
         public async Task<bool> Register(RegisterRequest request)
@@ -67,10 +97,10 @@ namespace eShopSolution.Application.System.Users
                 LastName = request.LastName,
                 Dob = request.Dob,
                 UserName = request.UserName,
-                Email=request.Email,
-                PhoneNumber=request.PhoneNumber                
+                Email = request.Email,
+                PhoneNumber = request.PhoneNumber
             };
-            var result= await _userManager.CreateAsync(appUser, request.Password);
+            var result = await _userManager.CreateAsync(appUser, request.Password);
             if (result.Succeeded) return true;
             return false;
         }

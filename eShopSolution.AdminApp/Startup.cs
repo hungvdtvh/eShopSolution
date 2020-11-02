@@ -29,6 +29,7 @@ namespace eShopSolution.AdminApp
         {
 
             services.AddHttpClient();
+           
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
@@ -38,6 +39,12 @@ namespace eShopSolution.AdminApp
             services.AddControllersWithViews()
                 .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<LoginRequestValidator>());
             IMvcBuilder buider = services.AddRazorPages();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+            });
+            services.AddTransient<IUserApiClient, UserApiClient>();
+
             var enviroment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 #if DEBUG
             if (enviroment== Environments.Development)
@@ -69,7 +76,7 @@ namespace eShopSolution.AdminApp
             app.UseRouting();
 
             app.UseAuthorization();
-
+            app.UseSession();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

@@ -19,25 +19,23 @@ namespace eShopSolution.AdminApp.Controllers
 {
     public class UserController : BaseController
     {
-        private readonly IUserApiClient _userClient;
+        private readonly IUserApiClient _userApiClient;
         private readonly IConfiguration _configuration;
-        public UserController(IUserApiClient userClient, IConfiguration configuration)
+        public UserController(IUserApiClient userApiClient, IConfiguration configuration)
         {
-            _userClient = userClient;
+            _userApiClient = userApiClient;
             _configuration = configuration;
         }
-        [HttpGet]
         public async Task<IActionResult> Index(string keyword, int pagIndex=1, int pageSize=10)
         {
-            var session = HttpContext.Session.GetString("Token");
             var request = new GetUserPagingRequest()
             {
-                BearerToken = session,
+                KeyWord=keyword,
                 PageIndex = pagIndex,
                 PageSize = pageSize
             };
-            var data = await _userClient.GetUsersPagings(request);
-            return View(data);
+            var data = await _userApiClient.GetUsersPagings(request);
+            return View(data.ResultObj);
         }
         
         [HttpPost]
@@ -60,8 +58,48 @@ namespace eShopSolution.AdminApp.Controllers
             {
                 return View();
             }
-            var result = await _userClient.RegisterUser(request);
-            if (result) return RedirectToAction("Index");
+            var result = await _userApiClient.RegisterUser(request);
+            if (result.IsSucessed) return RedirectToAction("Index");
+            ModelState.AddModelError("", result.Message);
+            return View(request);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var result = await _userApiClient.GetById(id);
+            if (result.IsSucessed)
+            {
+                var user = result.ResultObj;
+                var updateRequest = new UpdateRequest()
+                {
+                    Dob = user.Dob,
+                    Email = user.Email,
+                    FristName = user.FirstName,
+                    LastName = user.LastName,
+                    PhoneNumber = user.PhoneNumber,
+                    Id=id
+                };
+                return View(updateRequest);
+            }
+            return RedirectToAction("Error", "Home");
+           
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(UpdateRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            var result = await _userApiClient.Update(request.Id, request);
+
+            if (result.IsSucessed) 
+                return RedirectToAction("Index");
+
+            ModelState.AddModelError("", result.Message);
             return View(request);
         }
         private ClaimsPrincipal ValidateToken(string jwtToken)

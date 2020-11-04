@@ -28,9 +28,8 @@ namespace eShopSolution.BackenApi.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var resultToken = await _userService.Authencate(request);
 
-            if (string.IsNullOrEmpty(resultToken))
+            if (string.IsNullOrEmpty(resultToken.ResultObj))
                 return BadRequest("UserName or Password is incorrect");
-            
             return Ok(resultToken);
         }
 
@@ -41,9 +40,19 @@ namespace eShopSolution.BackenApi.Controllers
 
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var result = await _userService.Register(request);
-            if (result)
+            if (result.IsSucessed)
                 return Ok();
-            else return BadRequest(ModelState);
+            else return BadRequest(result);
+        }        
+        //https://lococalhost/api/users/update/id
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateRequest request)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            var result = await _userService.Update(id, request);
+            if (result.IsSucessed)
+                return Ok(result);
+            else return BadRequest(result);
         }
 
         [HttpGet("paging")]
@@ -51,6 +60,13 @@ namespace eShopSolution.BackenApi.Controllers
         {
             var product = await _userService.GetUserPaging(request);
             return Ok(product);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(Guid id)
+        {
+            var user = await _userService.GetById(id);
+            return Ok(user);
         }
     }
 }

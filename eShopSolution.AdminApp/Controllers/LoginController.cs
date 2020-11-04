@@ -17,52 +17,41 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace eShopSolution.AdminApp.Controllers
 {
-    public class UserController : BaseController
+    
+    public class LoginController : Controller
     {
         private readonly IUserApiClient _userClient;
         private readonly IConfiguration _configuration;
-        public UserController(IUserApiClient userClient, IConfiguration configuration)
+        public LoginController(IUserApiClient userClient, IConfiguration configuration)
         {
             _userClient = userClient;
             _configuration = configuration;
         }
         [HttpGet]
-        public async Task<IActionResult> Index(string keyword, int pagIndex=1, int pageSize=10)
-        {
-            var session = HttpContext.Session.GetString("Token");
-            var request = new GetUserPagingRequest()
-            {
-                BearerToken = session,
-                PageIndex = pagIndex,
-                PageSize = pageSize
-            };
-            var data = await _userClient.GetUsersPagings(request);
-            return View(data);
-        }
-        
-        [HttpPost]
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> Index()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            HttpContext.Session.Remove("Token");
-            return RedirectToAction("Index", "Login");
-        }
-        [HttpGet]
-        public IActionResult Create()
-        {            
             return View();
         }
-
         [HttpPost]
-        public async Task<IActionResult> Create(RegisterRequest request)
+        public async Task<IActionResult> Index(LoginRequest request)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid) return View(ModelState);
+            var token = await _userClient.Authenticate(request);
+            var userPrincipal = this.ValidateToken(token);
+
+            var authProperties = new AuthenticationProperties
             {
-                return View();
-            }
-            var result = await _userClient.RegisterUser(request);
-            if (result) return RedirectToAction("Index");
-            return View(request);
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10),
+                IsPersistent = false
+            };
+            HttpContext.Session.SetString("Token", token);
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                userPrincipal,
+                authProperties);
+
+            return RedirectToAction("Index", "Home");
         }
         private ClaimsPrincipal ValidateToken(string jwtToken)
         {

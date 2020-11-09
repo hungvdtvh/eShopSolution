@@ -106,6 +106,25 @@ namespace eShopSolution.AdminApp.Controllers
             var result = await _userApiClient.GetById(id);
             return View(result.ResultObj);
         }
+        [HttpGet]
+        public  IActionResult Delete(Guid id)
+        {
+            return View( new DeleteRequest() { 
+                Id=id
+            });
+        }
+        [HttpPost]
+        public async Task<IActionResult> Delete(DeleteRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
+            var result = await _userApiClient.Delete(request.Id);
+            if (result.IsSucessed) return RedirectToAction("Index");
+            ModelState.AddModelError("", result.Message);
+            return View(request);
+        }
         private ClaimsPrincipal ValidateToken(string jwtToken)
         {
             IdentityModelEventSource.ShowPII = true;

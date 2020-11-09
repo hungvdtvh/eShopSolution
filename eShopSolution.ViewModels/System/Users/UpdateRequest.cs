@@ -8,9 +8,9 @@ namespace eShopSolution.ViewModels.System.Users
     public class UpdateRequest
     {
         public Guid Id { get; set; }
-        [Display(Name = "Tên")]
-        public string FristName { get; set; }
         [Display(Name = "Họ")]
+        public string FristName { get; set; }
+        [Display(Name = "Tên")]
         public string LastName { get; set; }
         [Display(Name = "Ngày sinh")]
         [DataType(DataType.Date)]

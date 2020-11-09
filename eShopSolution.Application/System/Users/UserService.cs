@@ -77,6 +77,7 @@ namespace eShopSolution.Application.System.Users
                 FirstName = user.FristName,
                 Dob = user.Dob,
                 Id = user.Id,
+                UserName = user.UserName,
                 LastName = user.LastName
             };
             return new ApiSucessResult<UserVm>(userVm);
@@ -87,6 +88,7 @@ namespace eShopSolution.Application.System.Users
             var querry = _userManager.Users;
             if (!string.IsNullOrEmpty(request.KeyWord))
                 querry = querry.Where(x => x.UserName.Contains(request.KeyWord) || x.PhoneNumber.Contains(request.KeyWord));
+
             int totalRow = await querry.CountAsync();
             var data = await querry.Skip((request.PageIndex - 1) * request.PageSize)
                 .Take(request.PageSize)
@@ -102,7 +104,9 @@ namespace eShopSolution.Application.System.Users
 
             var pageResult = new PagedResult<UserVm>()
             {
-                TotalRecord = totalRow,
+                TotalRecords = totalRow,
+                PageIndex = request.PageIndex,
+                PageSize = request.PageSize,
                 Items = data
             };
             return new ApiSucessResult<PagedResult<UserVm>>(pageResult);

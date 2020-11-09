@@ -41,7 +41,7 @@ namespace eShopSolution.BackenApi.Controllers
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var result = await _userService.Register(request);
             if (result.IsSucessed)
-                return Ok();
+                return Ok(result);
             else return BadRequest(result);
         }        
         //https://lococalhost/api/users/update/id

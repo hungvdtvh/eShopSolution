@@ -26,18 +26,18 @@ namespace eShopSolution.AdminApp.Controllers
             _userApiClient = userApiClient;
             _configuration = configuration;
         }
-        public async Task<IActionResult> Index(string keyword, int pagIndex=1, int pageSize=10)
+        public async Task<IActionResult> Index(string keyword, int pageIndex = 1, int pageSize = 1)
         {
             var request = new GetUserPagingRequest()
             {
-                KeyWord=keyword,
-                PageIndex = pagIndex,
+                KeyWord = keyword,
+                PageIndex = pageIndex,
                 PageSize = pageSize
             };
             var data = await _userApiClient.GetUsersPagings(request);
             return View(data.ResultObj);
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
@@ -47,7 +47,7 @@ namespace eShopSolution.AdminApp.Controllers
         }
         [HttpGet]
         public IActionResult Create()
-        {            
+        {
             return View();
         }
 
@@ -63,8 +63,6 @@ namespace eShopSolution.AdminApp.Controllers
             ModelState.AddModelError("", result.Message);
             return View(request);
         }
-
-
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
@@ -79,12 +77,12 @@ namespace eShopSolution.AdminApp.Controllers
                     FristName = user.FirstName,
                     LastName = user.LastName,
                     PhoneNumber = user.PhoneNumber,
-                    Id=id
+                    Id = id
                 };
                 return View(updateRequest);
             }
             return RedirectToAction("Error", "Home");
-           
+
         }
 
         [HttpPost]
@@ -96,11 +94,17 @@ namespace eShopSolution.AdminApp.Controllers
             }
             var result = await _userApiClient.Update(request.Id, request);
 
-            if (result.IsSucessed) 
+            if (result.IsSucessed)
                 return RedirectToAction("Index");
 
             ModelState.AddModelError("", result.Message);
             return View(request);
+        }
+        [HttpGet]
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var result = await _userApiClient.GetById(id);
+            return View(result.ResultObj);
         }
         private ClaimsPrincipal ValidateToken(string jwtToken)
         {

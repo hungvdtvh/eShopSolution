@@ -1,4 +1,5 @@
 ﻿using eShopSolution.Data.Entities;
+using eShopSolution.Utilities.Constants;
 using eShopSolution.Utilities.Exceptions;
 using eShopSolution.ViewModels.Common;
 using eShopSolution.ViewModels.System.Users;
@@ -39,7 +40,7 @@ namespace eShopSolution.Application.System.Users
         public async Task<ApiResult<string>> Authencate(LoginRequest request)
         {
             var user = await _userManager.FindByNameAsync(request.UserName);
-            if (user == null) return null;
+            if (user == null) return new ApiErrorResult<string>("Tài khoản không tồn tại");
 
             var result = await _signInManager.PasswordSignInAsync(user, request.Password, request.RememberMe, true);
             if (!result.Succeeded) return new ApiErrorResult<string>("Tài khoản hoặc mật khẩu của bạn không đúng");
@@ -99,8 +100,15 @@ namespace eShopSolution.Application.System.Users
         public async Task<ApiResult<PagedResult<UserVm>>> GetUserPaging(GetUserPagingRequest request)
         {
             var querry = _userManager.Users;
-            if (!string.IsNullOrEmpty(request.KeyWord))
-                querry = querry.Where(x => x.UserName.Contains(request.KeyWord) || x.PhoneNumber.Contains(request.KeyWord));
+            if (!string.IsNullOrEmpty(request.Keyword))
+            {
+                //string strKeyWord = SystemConstants.RemoveSign4VietnameseString(request.KeyWord);
+                querry = querry.Where(x =>x.UserName.Contains(request.Keyword)
+                || x.FristName.Contains(request.Keyword)
+                || x.LastName.Contains(request.Keyword) 
+                );
+            }
+                
 
             int totalRow = await querry.CountAsync();
             var data = await querry.Skip((request.PageIndex - 1) * request.PageSize)

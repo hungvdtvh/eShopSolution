@@ -30,6 +30,13 @@ namespace eShopSolution.BackenApi.Controllers
             var product = await _productService.GetAllByCategory(request, langugeId);
             return Ok(product);
         }
+
+        [HttpGet("paging")]
+        public async Task<IActionResult> GetPagging([FromQuery] GetManageProductPagingRequest request)
+        {
+            var product = await _productService.GetAllPaging(request);
+            return Ok(product);
+        }
         [HttpGet("{productId}/{languageId}")]
         public async Task<IActionResult> GetById(int productId, string languageId)
         {

@@ -81,7 +81,7 @@ namespace eShopSolution.AdminApp.Services
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
 
             var response = await client.GetAsync($"/api/users/paging?pageIndex=" +
-                $"{request.PageIndex}&pageSize={request.PageSize}& keyword={request.KeyWord}");
+                $"{request.PageIndex}&pageSize={request.PageSize}&keyword={request.Keyword}");            
             var body = await response.Content.ReadAsStringAsync();
             var users = JsonConvert.DeserializeObject<ApiSucessResult<PagedResult<UserVm>>>(body);
             return users;
@@ -102,6 +102,23 @@ namespace eShopSolution.AdminApp.Services
                 return JsonConvert.DeserializeObject<ApiSucessResult<bool>>(result);
             return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
 
+        }
+
+        public async Task<ApiResult<bool>> RoleAssign(Guid id, RoleAssignRequest request)
+        {
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_configuration["BaseAddress"]);
+            var session = _httpContextAccessor.HttpContext.Session.GetString("Token");
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", session);
+
+            var json = JsonConvert.SerializeObject(request);
+            var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PutAsync($"/api/users/{id}/roles", httpContent);
+            var result = await response.Content.ReadAsStringAsync();
+            if (response.IsSuccessStatusCode)
+                return JsonConvert.DeserializeObject<ApiSucessResult<bool>>(result);
+            return JsonConvert.DeserializeObject<ApiErrorResult<bool>>(result);
         }
 
         public async Task<ApiResult<bool>> Update(Guid id, UpdateRequest request)

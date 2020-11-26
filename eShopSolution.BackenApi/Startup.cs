@@ -20,6 +20,8 @@ using Microsoft.IdentityModel.Tokens;
 using FluentValidation.AspNetCore;
 using eShopSolution.ViewModels.System.Users;
 using FluentValidation;
+using eShopSolution.Application.System.Roles;
+using eShopSolution.Application.System.Languages;
 
 namespace eShopSolution.BackenApi
 {
@@ -49,6 +51,8 @@ namespace eShopSolution.BackenApi
             services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
             services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IRoleService, RoleService>();
+            services.AddTransient<ILanguageService, LanguageService>();
 
             //services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
 

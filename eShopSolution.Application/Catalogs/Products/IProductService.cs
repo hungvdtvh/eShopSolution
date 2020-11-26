@@ -10,21 +10,19 @@ namespace eShopSolution.Application.Catalogs.Products
     public interface IProductService
     {
         
-        Task<int> Create(ProductCreateRequest request, string langugeID);
+        Task<int> Create(ProductCreateRequest request);
         Task<int> Update(ProductUpdateRequest request);
         Task<bool> UpdatePrice(int productId, decimal newPrice);
         Task<bool> UpdateStock(int productId, int addQuatity);
         Task AddViewCount(int productId);
         Task<int> Delete(int productId);
-        Task<PagedResult<ProductViewModel>> GetAllPaging(GetManageProductPagingRequest request);
-        Task<ProductViewModel> GetById(int productId, string languageId);
-
-
+        Task<PagedResult<ProductVm>> GetAllPaging(GetManageProductPagingRequest request);
+        Task<ProductVm> GetById(int productId, string languageId);
         Task<int> AddImages(int productId, ProductImageCreateRequest reuest);
         Task<int> RemoveImages(int imageId);
         Task<int> UpdatesImages(int imageId, ProductImageUpdateRequest request);
         Task<List<ProductImageViewModel>> GetListImages(int productId);
         Task<ProductImageViewModel> GetImageById(int imageId);
-        Task<PagedResult<ProductViewModel>> GetAllByCategory(GetPublicProductPagingRequest request, string langugeId);
+        Task<PagedResult<ProductVm>> GetAllByCategory(GetPublicProductPagingRequest request, string langugeId);
     }
 }

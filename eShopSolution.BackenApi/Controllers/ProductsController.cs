@@ -30,6 +30,13 @@ namespace eShopSolution.BackenApi.Controllers
             var product = await _productService.GetAllByCategory(request, langugeId);
             return Ok(product);
         }
+
+        [HttpGet("paging")]
+        public async Task<IActionResult> GetPagging([FromQuery] GetManageProductPagingRequest request)
+        {
+            var product = await _productService.GetAllPaging(request);
+            return Ok(product);
+        }
         [HttpGet("{productId}/{languageId}")]
         public async Task<IActionResult> GetById(int productId, string languageId)
         {
@@ -38,17 +45,18 @@ namespace eShopSolution.BackenApi.Controllers
             return Ok(product);
         }
 
-        [HttpPost("add-product/{languageId}")]
-        public async Task<IActionResult> Create([FromForm] ProductCreateRequest request, string languageId)
+        [HttpPost()]
+        [Consumes("multipart/form-data")]
+        public async Task<IActionResult> Create([FromForm] ProductCreateRequest request)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
-            var productId = await _productService.Create(request, languageId);
+            var productId = await _productService.Create(request);
             if (productId == 0)
             {
                 return BadRequest();
             }
 
-            var product = await _productService.GetById(productId, languageId);
+            var product = await _productService.GetById(productId, request.LanguageId);
             return CreatedAtAction(nameof(GetById), new { id = productId }, product);
         }
 

@@ -5,8 +5,9 @@ using System.Text;
 
 namespace eShopSolution.ViewModels.System.Users
 {
-    public class GetUserPagingRequest : PagingRequestBase
+    public class RoleAssignRequest
     {
-        public string Keyword{ get; set; }
+        public Guid Id { get; set; }
+        public List<SelectItem> Roles { get; set; } = new List<SelectItem>();
     }
 }

@@ -10,7 +10,7 @@ namespace eShopSolution.Application.Catalogs.Products
     public interface IProductService
     {
         
-        Task<int> Create(ProductCreateRequest request, string langugeID);
+        Task<int> Create(ProductCreateRequest request);
         Task<int> Update(ProductUpdateRequest request);
         Task<bool> UpdatePrice(int productId, decimal newPrice);
         Task<bool> UpdateStock(int productId, int addQuatity);

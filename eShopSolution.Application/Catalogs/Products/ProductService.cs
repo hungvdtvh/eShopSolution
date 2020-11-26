@@ -35,7 +35,7 @@ namespace eShopSolution.Application.Catalogs.Products
             await _context.SaveChangesAsync();
         }
 
-        public async Task<int> Create(ProductCreateRequest request, string languageId)
+        public async Task<int> Create(ProductCreateRequest request)
         {
 
             var product = new Product()
@@ -55,7 +55,7 @@ namespace eShopSolution.Application.Catalogs.Products
                         SeoDescription= request.SeoDescription,
                         SeoAlias= request.SeoAlias,
                         SeoTitle= request.SeoTitle,
-                        LanguageId=languageId
+                        LanguageId=request.LanguageId
                     }
                 }
             };
@@ -85,17 +85,17 @@ namespace eShopSolution.Application.Catalogs.Products
             //1. Select join
             var querry = from p in _context.Products
                          join pt in _context.ProductTranslations on p.Id equals pt.ProductId
-                         join pic in _context.ProductInCategories on p.Id equals pic.ProductId
-                         join c in _context.Categories on pic.CategoryId equals c.Id
+                         //join pic in _context.ProductInCategories on p.Id equals pic.ProductId
+                         //join c in _context.Categories on pic.CategoryId equals c.Id
                          where pt.LanguageId == request.LanguageId
-                         select new { p, pt, pic };
+                         select new { p, pt };
             //2. Filter
             if (!string.IsNullOrEmpty(request.Keyword))
                 querry = querry.Where(x => x.pt.Name.Contains(request.Keyword));
-            if (request.CategoryIds != null && request.CategoryIds.Count > 0 )
-            {
-                querry = querry.Where(p => request.CategoryIds.Contains(p.pic.CategoryId));
-            }
+            //if (request.CategoryIds != null && request.CategoryIds.Count > 0 )
+            //{
+            //    querry = querry.Where(p => request.CategoryIds.Contains(p.pic.CategoryId));
+            //}
             //3. Paging
             int toTalRow = await querry.CountAsync();
             var data = await querry

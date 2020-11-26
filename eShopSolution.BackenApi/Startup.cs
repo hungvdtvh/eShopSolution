@@ -22,6 +22,7 @@ using eShopSolution.ViewModels.System.Users;
 using FluentValidation;
 using eShopSolution.Application.System.Roles;
 using eShopSolution.Application.System.Languages;
+using eShopSolution.Application.Catalogs.Categories;
 
 namespace eShopSolution.BackenApi
 {
@@ -53,6 +54,7 @@ namespace eShopSolution.BackenApi
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<ILanguageService, LanguageService>();
+            services.AddTransient<ICategoryService, CategoryService>();
 
             //services.AddTransient<IValidator<LoginRequest>, LoginRequestValidator>();
 
